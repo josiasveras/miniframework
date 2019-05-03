@@ -3,6 +3,25 @@
 namespace App;
 
 class Route {
+
+	private $routes;
+
+	public function __construct(){
+		$this->initRoutes();
+		$this->run($this->geturl());
+	}
+
+	public function getRoutes(){
+		//
+		return $this->routes;
+	}
+
+	public function setRoutes(array $routes){
+		//
+		$this->routes = $routes;
+	}
+
+
 	//Definição das rotas da nossa aplicação
 	public function initRoutes() {
 		//arrays que administram as rotas de URL
@@ -13,10 +32,28 @@ class Route {
 		);
 
 		$routes['sobre_nos'] = array(
-			'route' => 'sobre_nos',
+			'route' => '/sobre_nos',
 			'controller' => 'indexController',
-			'action' => 'sobre_nos'
+			'action' => 'sobreNos'
 		);
+
+		$this->setRoutes($routes);
+
+	}
+
+	public function run($url) {
+		foreach ($this->getRoutes() as $key => $route) {
+
+			if ($url == $route['route']) {
+				$class = "App\\Controllers\\".ucfirst($route['controller']);
+
+				$contoller = new $class;
+
+				$action = $route['action'];
+
+				$contoller->$action();
+			}
+		}
 
 	}
 
