@@ -2,23 +2,20 @@
 
 namespace App\Controllers;
 
+//Os recursos do miniframework
 use MF\Controller\Action;
-use App\Connection;
+use MF\Model\Container;
+
+//Os models
 use App\Models\Produto;
+use App\Models\Info;
+
 
 class IndexController extends Action{
 
 	public function index() {
 
-	//A variável $dados é passada com segundo parâmetro da função render para que seja possível recuperar seu conteúdo dentro do escopo em que ela não existe
-	   	//$this->view->dados = array ('sofá', 'cadeira', 'cama');
-
-		//Instância de conexão
-		//Pelo fato do método getDb ser do tipo estático eu não precisei instânciar a classe Connection para fazer a utilização do método getDb aqui
-		$conn = Connection::getDb();
-
-		//Instanciar modelo
-		$produto = new Produto($conn);
+		$produto = Container::getModel('Produto');
 
 		$produtos = $produto->getProdutos();
 
@@ -30,7 +27,12 @@ class IndexController extends Action{
 
 	public function sobreNos() {
 
-		//$this->view->dados = array ('notebook', 'smarphone', 'tablet');
+		$info = Container::getModel('Info');
+
+		$informacoes = $info->getInfo();
+
+		$this->view->dados = $informacoes;
+		
 		$this->render('sobreNos', 'layout2');
 
 	}
